@@ -3,7 +3,7 @@
 using namespace std;
 
 int main() {
-    Matrix matrix();
+    Matrix matrix;
     matrix.show();
 
     return 0;
