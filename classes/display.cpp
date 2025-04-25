@@ -88,3 +88,7 @@ int Display::get_left_top_coordinate(int coord_val, int interval){
         return coord_val + (interval+1)/2;
     }
 }
+
+void Display::set_matrix(int x, int y, char simbol) {
+    mtx[x][y] = simbol;
+}
