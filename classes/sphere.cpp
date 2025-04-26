@@ -1,19 +1,8 @@
-#ifndef SPHERE_H
-#define SPHERE_H
+#include "sphere.h"
 
-class Sphere {
-public:
-    int radius;
-    int center_x;
-    int center_y;
-    int center_z;
-
-    Sphere(int r, int x, int y, int z);
-
-
-
-private:
-
-};
-
-#endif
+Sphere::Sphere(int x, int y, int z, int r) {
+    this->center_x = x;
+    this->center_y = y;
+    this->center_z = z;
+    this->radius = r;
+}

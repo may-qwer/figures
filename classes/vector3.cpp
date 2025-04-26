@@ -1,4 +1,5 @@
 #include "vector3.h"
+#include <math.h>
 
 Vector3::Vector3(int x, int y, int z) {
     this->x = x;
@@ -9,4 +10,8 @@ Vector3::Vector3(int x, int y, int z) {
 Vector3 *Vector3::scalar_product_of_vectors_this_and_v2(Vector3 *v2) {
     Vector3 *res_v = new Vector3(this->x*v2->x, this->y*v2->y, this->z*v2->z);
     return res_v;
+}
+
+int Vector3::len_of_vector3(){
+    return sqrt(pow(this->x, 2) + pow(this->y, 2) + pow(this->z, 2));
 }

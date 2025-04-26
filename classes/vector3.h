@@ -11,6 +11,8 @@ public:
 
     Vector3 *scalar_product_of_vectors_this_and_v2(Vector3 *v2);
 
+    int len_of_vector3();
+
 private:
 
 };

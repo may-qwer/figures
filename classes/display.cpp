@@ -1,11 +1,19 @@
 #include "display.h"
 #include <unistd.h> 
 #include <iostream>
+#include <math.h>
+#include "vector3.h"
+#include "sphere.h"
 using namespace std;
 
-int count_col = 25;
+struct roots_of_quadraic {
+    int t1;
+    int t2;
+}
 
 Display::Display() {
+    Sphere sphere1(18, 57, 14, 5); 
+
     hieght;
     width;
     mtx = new char*[hieght];
@@ -91,4 +99,39 @@ int Display::get_left_top_coordinate(int coord_val, int interval){
 
 void Display::set_matrix(int x, int y, char simbol) {
     mtx[x][y] = simbol;
+}
+
+Vector3 *Display::display_to_viewport(int x, int y){
+    Vector3 *res_v = new Vector3(x, y, d);
+    return res_v;
+}
+
+char Display::simbol_of_ray_trace(){
+
+}
+
+int *Display::intersect_ray_sphere(Vector3 *O, Vector3 *D, Sphere *sphere){
+    Vector3 C(sphere.center_x, sphere.center_y, sphere.center_z);
+    int r = sphere->radius;
+    Vector3 OC(O->x - C->x, O->y - C->y, O->z - C->z);
+
+    Vector3 *tmp1 = D->scalar_product_of_vectors_this_and_v2(*D);
+    int k1 = tmp1->len_of_vector3();
+    Vector3 *tmp2 = OC.scalar_product_of_vectors_this_and_v2(D);
+    int k2 = 2*tmp2->len_of_vector3();
+    Vector3 *tmp3 = OC.scalar_product_of_vectors_this_and_v2(OC);
+    int k3 = tmp3->len_of_vector3() - pow(r, 2);
+
+    discriminant = pow(k2, 2) - 4*k1*k3;
+    struct roots_of_quadraic ret_roots;
+    if (discriminant < 0) {
+        ret_roots.t1 = 0;
+        ret_roots.t2 = 0;
+    } else {
+        t1 = (-k2 + sqrt(discriminant))/(2*k1);
+        t2 = (-k2 - sqrt(discriminant))/(2*k1);
+        ret_roots.t1 = t1;
+        ret_roots.t2 = t2;
+    }
+    return &ret_roots;
 }
