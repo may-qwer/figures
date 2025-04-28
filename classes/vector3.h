@@ -9,7 +9,7 @@ public:
 
     Vector3(int x, int y, int z);
 
-    Vector3 *scalar_product_of_vectors_this_and_v2(Vector3 *v2);
+    int scalar_product_of_vectors_this_and_v2(Vector3 *v2);
 
     int len_of_vector3();
 

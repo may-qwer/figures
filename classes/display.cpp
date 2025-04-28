@@ -3,27 +3,18 @@
 #include <iostream>
 #include <math.h>
 #include "vector3.h"
-#include "sphere.h"
+
 using namespace std;
 
-struct roots_of_quadraic {
-    int t1;
-    int t2;
-}
 
 Display::Display() {
-    Sphere sphere1(18, 57, 14, 5); 
+    sphere = new Sphere(30, 50, 14, 20); 
 
-    hieght;
+    height;
     width;
-    mtx = new char*[hieght];
-    x_coords = new int[width];
-    y_coords = new int[hieght];
-    for (int i = 0; i<hieght; i++) {
+    mtx = new char*[height];
+    for (int i = 0; i<height; i++) {
         mtx[i] = new char[width];
-        for (int j = 0; j<width; j++) {
-            mtx[i][j] = '.';
-        }
     }
 }
 
@@ -32,106 +23,56 @@ Display::~Display() {
 }
 
 void Display::show() {
-    set_coords();
-    for (int k = 0; k < 1; k++) {
-        for (int i = 0; i<hieght; i++) {
-            print_coord(y_coords[i]);
-            cout << " ";
-            for (int j = 0; j<width; j++) {
-                cout << mtx[i][j];
-            }
-            cout << endl;
-        }
-        usleep(250000); //1000000 mks = 1 s
-        cout << "  ";
-        for (int i = 0; i < width; i++) {
-            print_coord(x_coords[i]);
+    set_simbols_to_mtx();
+    for (int i = 0; i<height; i++) {
+        cout << " ";
+        for (int j = 0; j<width; j++) {
+            cout << mtx[i][j];
         }
         cout << endl;
-        cout << endl;
     }
 
 }
 
-void Display::set_coords() {
-    int k = 0;
-    for (int i = -((width-1)/2); i < (width+1)/2; i++) {
-        x_coords[k] = i;
-        k++;
-    }
-    k = 0;
-    for (int j = -((hieght-1)/2); j < (hieght+1)/2; j++) {
-        y_coords[k] = j;
-        k++;
+void Display::set_simbols_to_mtx() {
+    for (int i = 0; i < height; i++) {
+        for (int j = 0; j < width; j++) {
+            set_simbol_to_element(i, j);
+        }
     }
 }
 
-void Display::print_coord(int val) {
-    if (val < 0) {
-        cout << "-";
-    } else if (val == 0) {
-        cout << "0";
-    } else {
-        cout << "+";
+void Display::set_simbol_to_element(int x, int y) {
+    mtx[x][y] = choose_simnbol_to_element(x, y);
+}
+
+char Display::choose_simnbol_to_element(int x, int y) {
+    struct intersections t12 = ray_tracing(x, y);
+    int t1 = t12.t1;
+    int t2 = t12.t2;
+    if ((t1 > start_ray_point && t1 < end_ray_point) || (t2 > start_ray_point && t2 < end_ray_point)) {
+        return *arr_of_simbols[1];
     }
+    return *arr_of_simbols[0];
 }
 
-int Display::get_center_coordinate(int coord_val, int interval){
-    if (coord_val < (interval-1)/2) {
-        return -(coord_val);
-    } else if (coord_val > (interval+1)/2) {
-        return coord_val - (interval+1)/2;
-    } else if (coord_val = (interval-1)/2 + 1) {
-        return 0;
-    }
-    return 0;
-}
+Display::intersections Display::ray_tracing(int x, int y) {
+    struct intersections t12;
+    t12.t1 = 0;
+    t12.t2 = 0;
 
-int Display::get_left_top_coordinate(int coord_val, int interval){
-    if (coord_val < 0) {
-        return abs(coord_val);
-    } else if (coord_val == 0) {
-        return (interval-1)/2 + 1;
-    } else if (coord_val > 0) {
-        return coord_val + (interval+1)/2;
-    }
-}
-
-void Display::set_matrix(int x, int y, char simbol) {
-    mtx[x][y] = simbol;
-}
-
-Vector3 *Display::display_to_viewport(int x, int y){
-    Vector3 *res_v = new Vector3(x, y, d);
-    return res_v;
-}
-
-char Display::simbol_of_ray_trace(){
-
-}
-
-int *Display::intersect_ray_sphere(Vector3 *O, Vector3 *D, Sphere *sphere){
-    Vector3 C(sphere.center_x, sphere.center_y, sphere.center_z);
     int r = sphere->radius;
-    Vector3 OC(O->x - C->x, O->y - C->y, O->z - C->z);
+    Vector3 D(x - O.x, y - O.y, d - O.z);
+    Vector3 OC(eye_x - sphere->center_x, eye_y - sphere->center_y, eye_z - sphere->center_z);
 
-    Vector3 *tmp1 = D->scalar_product_of_vectors_this_and_v2(*D);
-    int k1 = tmp1->len_of_vector3();
-    Vector3 *tmp2 = OC.scalar_product_of_vectors_this_and_v2(D);
-    int k2 = 2*tmp2->len_of_vector3();
-    Vector3 *tmp3 = OC.scalar_product_of_vectors_this_and_v2(OC);
-    int k3 = tmp3->len_of_vector3() - pow(r, 2);
-
-    discriminant = pow(k2, 2) - 4*k1*k3;
-    struct roots_of_quadraic ret_roots;
-    if (discriminant < 0) {
-        ret_roots.t1 = 0;
-        ret_roots.t2 = 0;
-    } else {
-        t1 = (-k2 + sqrt(discriminant))/(2*k1);
-        t2 = (-k2 - sqrt(discriminant))/(2*k1);
-        ret_roots.t1 = t1;
-        ret_roots.t2 = t2;
+    int k1 = D.scalar_product_of_vectors_this_and_v2(&D);
+    int k2 = 2*OC.scalar_product_of_vectors_this_and_v2(&D);
+    int k3 = OC.scalar_product_of_vectors_this_and_v2(&OC) - pow(r, 2);
+        
+    int discriminant = pow(k2, 2) - 4*k1*k3;
+    if (discriminant >= 0) {
+        t12.t1 = (-k2 + sqrt(discriminant)) / (2*k1);
+        t12.t2 = (-k2 - sqrt(discriminant)) / (2*k1);
     }
-    return &ret_roots;
+    return t12;
 }
