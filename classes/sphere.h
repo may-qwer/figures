@@ -3,12 +3,12 @@
 
 class Sphere {
 public:
-    int radius;
-    int center_x;
-    int center_y;
-    int center_z;
+    float radius;
+    float center_x;
+    float center_y;
+    float center_z;
 
-    Sphere(int r, int x, int y, int z);
+    Sphere(float r, float x, float y, float z);
 
 
 
