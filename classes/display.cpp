@@ -8,7 +8,7 @@ using namespace std;
 
 
 Display::Display() {
-    sphere = new Sphere(0, 0, 3, 5); 
+    sphere = new Sphere(17, 50, 0, 5); 
 
     height;
     width;
@@ -49,6 +49,7 @@ char Display::choose_simnbol_to_element(int x, int y) {
     struct intersections t12 = ray_tracing(x, y);
     float t1 = t12.t1;
     float t2 = t12.t2;
+    cout << t1 << " " << t2 << endl;
     if ((t1 > start_ray_point && t1 < end_ray_point) || (t2 > start_ray_point && t2 < end_ray_point)) {
         return *arr_of_simbols[1];
     }
@@ -60,11 +61,17 @@ Display::intersections Display::ray_tracing(int x, int y) {
     t12.t1 = 0;
     t12.t2 = 0;
 
-    Vector3 O(eye_x, eye_y,eye_z);
+    Vector3 O(to_central_coords(eye_x, width), to_central_coords(eye_y, height),eye_z);
     Vector3 C(to_central_coords(sphere->center_x, width), to_central_coords(sphere->center_y, height), sphere->center_z);
-    int r = sphere->radius;
+    float r = sphere->radius;
     
     Vector3 D(to_central_coords(x, width) - O.x, to_central_coords(y, height) - O.y, d - O.z);
+    int len_d = D.len_of_vector3();
+    if (len_d != 0) {
+        D.x /= len_d;
+        D.y /= len_d;
+        D.z /= len_d;
+    }
     Vector3 OC(O.x - C.x, O.y - C.y, O.z - C.z);
 
     float k1 = D.scalar_product_of_vectors_this_and_v2(&D);
