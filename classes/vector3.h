@@ -13,6 +13,8 @@ public:
 
     float len_of_vector3();
 
+    void normalize();
+
 private:
 
 };

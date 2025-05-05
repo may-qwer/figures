@@ -8,13 +8,14 @@ using namespace std;
 
 
 Display::Display() {
-    sphere = new Sphere(17, 50, 0, 5); 
+    sphere = new Sphere(5, 17, 55, 2); 
+    EYE = new Vector3(0, 0, 0);
 
-    height;
-    width;
-    mtx = new char*[height];
-    for (int i = 0; i<height; i++) {
-        mtx[i] = new char[width];
+    HEIGHT;
+    WIDTH;
+    MTX = new char*[HEIGHT];
+    for (int i = 0; i<HEIGHT; i++) {
+        MTX[i] = new char[WIDTH];
     }
 }
 
@@ -24,66 +25,53 @@ Display::~Display() {
 
 void Display::show() {
     set_simbols_to_mtx();
-    for (int i = 0; i<height; i++) {
+    for (int i = 0; i<HEIGHT; i++) {
         cout << " ";
-        for (int j = 0; j<width; j++) {
-            cout << mtx[i][j];
+        for (int j = 0; j<WIDTH; j++) {
+            cout << MTX[i][j];
         }
         cout << endl;
     }
 }
 
 void Display::set_simbols_to_mtx() {
-    for (int i = 0; i < height; i++) {
-        for (int j = 0; j < width; j++) {
+    for (int i = 0; i < HEIGHT; i++) {
+        for (int j = 0; j < WIDTH; j++) {
             set_simbol_to_element(i, j);
         }
     }
 }
 
 void Display::set_simbol_to_element(int x, int y) {
-    mtx[x][y] = choose_simnbol_to_element(x, y);
+    MTX[x][y] = choose_simnbol_to_element(x, y);
 }
 
 char Display::choose_simnbol_to_element(int x, int y) {
-    struct intersections t12 = ray_tracing(x, y);
-    float t1 = t12.t1;
-    float t2 = t12.t2;
-    cout << t1 << " " << t2 << endl;
-    if ((t1 > start_ray_point && t1 < end_ray_point) || (t2 > start_ray_point && t2 < end_ray_point)) {
-        return *arr_of_simbols[1];
+    // Vector3 ray_dir(to_central_coords(x, WIDTH) - EYE->x, to_central_coords(y, HEIGHT) - EYE->y, D - EYE->z);
+    Vector3 ray_dir(x - EYE->x, y- EYE->y, D - EYE->z);
+    ray_dir.normalize();
+
+    float dist = ray_trace(&ray_dir);
+    if (dist > END_RAY_POINT - EPSILON) {
+        return *ARR_OF_SIMBOLS[0];
     }
-    return *arr_of_simbols[0];
+    return *ARR_OF_SIMBOLS[1];
 }
 
-Display::intersections Display::ray_tracing(int x, int y) {
-    struct intersections t12;
-    t12.t1 = 0;
-    t12.t2 = 0;
-
-    Vector3 O(to_central_coords(eye_x, width), to_central_coords(eye_y, height),eye_z);
-    Vector3 C(to_central_coords(sphere->center_x, width), to_central_coords(sphere->center_y, height), sphere->center_z);
-    float r = sphere->radius;
-    
-    Vector3 D(to_central_coords(x, width) - O.x, to_central_coords(y, height) - O.y, d - O.z);
-    int len_d = D.len_of_vector3();
-    if (len_d != 0) {
-        D.x /= len_d;
-        D.y /= len_d;
-        D.z /= len_d;
+float Display::ray_trace(Vector3 *ray_dir) {
+    float depth = START_RAY_POINT;
+    for (int i = 0; i < MAX_COUNT_STAPS; i++) {
+        Vector3 ray(sphere->x + depth*ray_dir->x, sphere->y + depth*ray_dir->y, sphere->z + depth*ray_dir->z);
+        float dist = get_sdf(&ray, sphere->radius);
+        if (dist < EPSILON) {
+            return depth;
+        }
+        depth += dist;
+        if (depth >= END_RAY_POINT) {
+            return END_RAY_POINT;
+        }
     }
-    Vector3 OC(O.x - C.x, O.y - C.y, O.z - C.z);
-
-    float k1 = D.scalar_product_of_vectors_this_and_v2(&D);
-    float k2 = 2*OC.scalar_product_of_vectors_this_and_v2(&D);
-    float k3 = OC.scalar_product_of_vectors_this_and_v2(&OC) - pow(r, 2);
-        
-    float discriminant = pow(k2, 2) - 4*k1*k3;
-    if (discriminant >= 0) {
-        t12.t1 = (-k2 + sqrt(discriminant)) / (2*k1);
-        t12.t2 = (-k2 - sqrt(discriminant)) / (2*k1);
-    }
-    return t12;
+    return END_RAY_POINT;
 }
 
 int Display::to_central_coords(int val, int range) {
@@ -95,4 +83,8 @@ int Display::to_central_coords(int val, int range) {
     } else {
         return val - center;
     }
+}
+
+float Display::get_sdf(Vector3 *point, int radius) {
+    return point->len_of_vector3() - radius;
 }

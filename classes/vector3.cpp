@@ -14,3 +14,10 @@ float Vector3::scalar_product_of_vectors_this_and_v2(Vector3 *v2) {
 float Vector3::len_of_vector3(){
     return sqrt(pow(this->x, 2) + pow(this->y, 2) + pow(this->z, 2));
 }
+
+void Vector3::normalize() {
+     float len = len_of_vector3();
+     this->x = this->x/len;
+     this->y = this->y/len;
+     this->z = this->z/len;
+}

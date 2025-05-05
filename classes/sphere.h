@@ -4,13 +4,11 @@
 class Sphere {
 public:
     int radius;
-    int center_x;
-    int center_y;
-    int center_z;
+    int x;
+    int y;
+    int z;
 
     Sphere(int r, int x, int y, int z);
-
-
 
 private:
 
