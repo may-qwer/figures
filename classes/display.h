@@ -9,8 +9,8 @@ public:
     int WIDTH = 101;
     int HEIGHT = 35;
     Vector3 *EYE;
-    int D = 1;
-    int START_RAY_POINT = 1;
+    int D = 2;
+    int START_RAY_POINT = 0;
     int END_RAY_POINT = 100;
     int MAX_COUNT_STAPS = 255;
     char *ARR_OF_SIMBOLS[2] = {".", "@"};

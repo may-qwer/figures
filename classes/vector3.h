@@ -15,6 +15,10 @@ public:
 
     void normalize();
 
+    void sum(Vector3 *v2);
+
+    void diff(Vector3 *v2);
+
 private:
 
 };
