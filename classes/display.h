@@ -18,9 +18,10 @@ public:
 
 private:
 
-    void set_simbol_to_el(int x, int y);
+    void set_simbol_to_el(int x, int y, int x0, int y0);
 
-    char make_curcle(float x, float y);
+    char make_curcle(float x, float y, float x0, float y0);
+
 
 };
 
