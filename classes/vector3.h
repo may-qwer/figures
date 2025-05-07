@@ -17,7 +17,7 @@ public:
 
     void sum(Vector3 *v2);
 
-    void diff(Vector3 *v2);
+    void sum(int num);
 
 private:
 

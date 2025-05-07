@@ -28,8 +28,8 @@ void Vector3::sum(Vector3 *v2){
     this->z += v2->z;
 }
 
-void Vector3::diff(Vector3 *v2){
-    this->x -= v2->x;
-    this->y -= v2->y;
-    this->z -= v2->z;
+void Vector3::sum(int num) {
+    this->x += num;
+    this->y += num;
+    this->z += num;
 }
