@@ -6,9 +6,13 @@ class Display {
 public:
     int HEIGHT = 23;
     int WIDTH = 79;
+    float PIXEL_WIDTH = 9.0;
+    float PIXEL_HEIGHT = 18.0;
     float SCALE;
     float SIMBOL_SCALE;
-    char** MTX;
+    int LEN_ARR_OF_SIMBOLS = 17;
+    char *ARR_OF_SIMBOLS;
+    char** mtx;
 
     Display();
 
