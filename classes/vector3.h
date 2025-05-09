@@ -9,6 +9,8 @@ public:
 
     Vector3(float x, float y, float z);
 
+    Vector3(int val);
+
     float scalar_product_of_vectors_this_and_v2(Vector3 *v2);
 
     float len_of_vector3();

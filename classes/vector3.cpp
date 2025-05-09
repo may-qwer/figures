@@ -7,6 +7,12 @@ Vector3::Vector3(float x, float y, float z) {
     this->z = z;
 }
 
+Vector3::Vector3(int val) {
+    this->x = val;
+    this->y = val;
+    this->z = val;
+}
+
 float Vector3::scalar_product_of_vectors_this_and_v2(Vector3 *v2) {
     return this->x * v2->x + this->y * v2->y + this->z * v2->z;
 }
@@ -17,9 +23,9 @@ float Vector3::len_of_vector3(){
 
 void Vector3::normalize() {
      float len = len_of_vector3();
-     this->x = this->x/len;
-     this->y = this->y/len;
-     this->z = this->z/len;
+     this->x /= len;
+     this->y /= len;
+     this->z /= len;
 }
 
 void Vector3::sum(Vector3 *v2){
