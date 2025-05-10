@@ -29,11 +29,11 @@ public:
 
 private:
 
-    void set_simbol_to_el(Vector2 *uv, int x, int y);
+    void set_simbol_to_el(Vector2 *uv);
 
     char make_curcle(Vector2 *uv, float x0 = 0.0, float y0 = 0.0);
 
-    char make_sphere(Vector2 *uv, Vector3 *D);
+    char make_sphere(Vector3 *D);
 };
 
 #endif

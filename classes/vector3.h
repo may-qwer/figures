@@ -21,6 +21,8 @@ public:
 
     void sum(int num);
 
+    void print_v3();
+
 private:
 
 };

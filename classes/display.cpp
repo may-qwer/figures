@@ -18,9 +18,9 @@ Display::Display() {
     SIMBOL_SCALE = (float)PIXEL_WIDTH/PIXEL_HEIGHT;
     LEN_ARR_OF_SIMBOLS;
     ARR_OF_SIMBOLS = new char[LEN_ARR_OF_SIMBOLS] {' ', '.', ':', '!', '/', 'r', '(', 'l', '1', 'Z', '4', 'H', '9', 'W', '8', '$', '@'};//{' ', '.', ',', '~', '=', '#'};
-    EYE = new Vector3(0, 0, -5);
-    D = new Vector3(0, 0, 1);
-    sphere1 = new Sphere(0, 0, 0, 1);
+    EYE = new Vector3(0.0, 0.0, -6.0);
+    D = new Vector3(0.0, 0.0, 1.0);
+    sphere1 = new Sphere(0.0, 0.0, 0.0, 3.0);
 
     mtx = new char*[WIDTH];
     for (int i = 0; i<WIDTH; i++) {
@@ -38,7 +38,7 @@ void Display::show() {
         for (int y = 0; y<HEIGHT; y++) {
             for (int x = 0; x<WIDTH; x++) {
                 Vector2 uv(x, y);
-                set_simbol_to_el(&uv, x, y);
+                set_simbol_to_el(&uv);
                 cout << mtx[x][y];
             }
             cout << endl;
@@ -46,7 +46,9 @@ void Display::show() {
     }
 }
 
-void Display::set_simbol_to_el(Vector2 *uv, int x, int y) {
+void Display::set_simbol_to_el(Vector2 *uv) {
+    int x = uv->x;
+    int y = uv->y;
     uv->x /= WIDTH;
     uv->y /= HEIGHT;
     uv->prod(2.0);
@@ -54,9 +56,12 @@ void Display::set_simbol_to_el(Vector2 *uv, int x, int y) {
     uv->x *= SCALE * SIMBOL_SCALE;
     D->x = uv->x;
     D->y = uv->y;
+    D->print_v3();
     D->normalize();
+    D->print_v3();
+
     // mtx[x][y] = make_curcle(uv);
-    mtx[x][y] = make_sphere(uv, D);
+    mtx[x][y] = make_sphere(D);
 }
 
 
@@ -71,11 +76,11 @@ char Display::make_curcle(Vector2 *uv, float x0, float y0) {
     return ARR_OF_SIMBOLS[color];
 }
 
-char Display::make_sphere(Vector2 *uv, Vector3 *D) {
+char Display::make_sphere(Vector3 *D) {
     Vector2 *intersection = sphere1->get_points(EYE, D);
-    cout << intersection->x << endl;
+    // cout << intersection->x << endl;
     if (intersection->x > 0) {
-        return '4';
+        return '@';
     }
     return ' ';
 }

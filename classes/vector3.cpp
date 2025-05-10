@@ -1,5 +1,6 @@
 #include "vector3.h"
 #include <math.h>
+#include <iostream>
 
 Vector3::Vector3(float x, float y, float z) {
     this->x = x;
@@ -38,4 +39,8 @@ void Vector3::sum(int num) {
     this->x += num;
     this->y += num;
     this->z += num;
+}
+
+void Vector3::print_v3() {
+    std::cout << "x: " << this->x << " y: " << this->y << " z: " << this->z << std::endl;
 }

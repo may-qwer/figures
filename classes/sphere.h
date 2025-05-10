@@ -5,10 +5,10 @@
 
 class Sphere {
 public:
-    int radius;
+    float radius;
     Vector3 *center_v3;
 
-    Sphere(int r, int x, int y, int z);
+    Sphere(float x, float y, float z, float r);
 
     Vector2 *get_points(Vector3 * EYE, Vector3 *D);
 
