@@ -21,6 +21,12 @@ public:
 
     void sum(int num);
 
+    void prod(float val);
+
+    void diff(Vector3 *v2);
+
+    void diff(float num);
+
     void print_v3();
 
 private:
