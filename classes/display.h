@@ -9,8 +9,6 @@ class Display {
 public:
     int HEIGHT = 23;
     int WIDTH = 79;
-    // int HEIGHT = 20;
-    // int WIDTH = 171;
     float PIXEL_WIDTH = 9.0;
     float PIXEL_HEIGHT = 18.0;
     float SCALE;
@@ -20,6 +18,7 @@ public:
     Vector3 *EYE;
     Vector3 *D;
     Sphere *sphere1;
+    Vector3 *light;
 
     char** mtx;
 

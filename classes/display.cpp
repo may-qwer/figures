@@ -21,6 +21,7 @@ Display::Display() {
     EYE = new Vector3(-5.0, 0.0, 0.0);
     D = new Vector3(0.0, 0.0, 0.0);
     sphere1 = new Sphere(0.0, 0.0, 0.0, 2.0);
+    light = new Vector3(0.0, 0.0, -0.5);
 
     mtx = new char*[WIDTH];
     for (int i = 0; i<WIDTH; i++) {
@@ -33,8 +34,13 @@ Display::~Display() {
 }
 
 void Display::show() {
-    for (int t = 0; t < 1; t++){
-        usleep(25000);
+    for (int t = 0; t < 2000; t++){
+        usleep(10000);
+        light->x = sin(t * 0.01);
+        light->y = cos(t * 0.01);
+        light->normalize();
+        sphere1->center_v3->x = sin(t * 0.01);
+        sphere1->center_v3->y = sin(t * 0.01);
         for (int y = 0; y<HEIGHT; y++) {
             for (int x = 0; x<WIDTH; x++) {
                 Vector2 uv(x, y);
@@ -58,8 +64,6 @@ void Display::set_simbol_to_el(Vector2 *uv) {
     D->y = uv->x;
     D->z = uv->y;
     D->normalize();
-    // cout << D->x << " " << D->y << " " << D->z << endl;
-
     // mtx[x][y] = make_curcle(uv);
     mtx[x][y] = make_sphere(D);
 }
@@ -77,12 +81,24 @@ char Display::make_curcle(Vector2 *uv, float x0, float y0) {
 }
 
 char Display::make_sphere(Vector3 *D) {
-    // Vector3 eye_with_sphere_coords(EYE->x, EYE->y, EYE->z);
-    // eye_with_sphere_coords.diff(sphere1->center_v3);
-    Vector2 *intersection = sphere1->get_points(EYE, D);
+    Vector3 eye_with_sphehre_pos(EYE->x, EYE->y, EYE->z);
+    eye_with_sphehre_pos.diff(sphere1->center_v3);
+    Vector2 *intersection = sphere1->get_points(&eye_with_sphehre_pos, D);
+    int color = 0;
     if (intersection->x > 0) {
-        return '@';
+        Vector3 it_point(D->x, D->y, D->z);
+        it_point.prod(intersection->x);;
+        it_point.sum(EYE);
+        it_point.normalize();
+        float diff = it_point.scalar_product_of_vectors_this_and_v2(light);
+
+        color = (int)(diff*20);
     }
-    return ' ';
+    if (color < 0) {
+        return ARR_OF_SIMBOLS[0];
+    } else if (color > LEN_ARR_OF_SIMBOLS) {
+        return ARR_OF_SIMBOLS[LEN_ARR_OF_SIMBOLS-1];
+    }
+    return ARR_OF_SIMBOLS[color];
 }
 
